@@ -22,11 +22,9 @@ class _HomePageScreenState extends State<HomePageScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (timeStamp) {
-        init();
-      },
-    );
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      init();
+    });
   }
 
   Future<void> init() async {

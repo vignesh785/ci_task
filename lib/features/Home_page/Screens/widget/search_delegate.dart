@@ -28,22 +28,24 @@ class CustomSearchDelegate extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    if (query.isNotEmpty) {
-      context.read<HomeController>().searchData(search: query);
-    }
-    final photos = context.read<HomeController>().searchResponse?.data ?? [];
-    if (context.read<HomeController>().isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-    return ListView.builder(
-      itemCount: photos.length,
-      itemBuilder: (context, index) {
-        return TileCard(
-          image: photos[index].thumbnailUrl,
-          title: photos[index].title,
-        );
-      },
-    );
+    return Consumer<HomeController>(builder: (context, provider, child) {
+      if (query.isNotEmpty) {
+        provider.searchData(search: query);
+      }
+      if (provider.isLoading) {
+        return const Center(child: CircularProgressIndicator());
+      }
+      final photos = provider.searchResponse?.data ?? [];
+      return ListView.builder(
+        itemCount: photos.length,
+        itemBuilder: (context, index) {
+          return TileCard(
+            image: photos[index].thumbnailUrl,
+            title: photos[index].title,
+          );
+        },
+      );
+    });
   }
 
   @override

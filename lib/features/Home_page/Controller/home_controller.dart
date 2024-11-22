@@ -2,6 +2,7 @@ import 'package:ci_task/features/Home_page/Model/photos_api_response.dart';
 import 'package:ci_task/features/Home_page/Model/product_model.dart';
 import 'package:ci_task/repository/home_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:hive/hive.dart';
 
 class HomeController extends ChangeNotifier {
@@ -28,27 +29,30 @@ class HomeController extends ChangeNotifier {
   }
 
   Future<void> fetchData({bool isPagenation = false}) async {
-    if (isPagenation) {
-      _page += 1;
+    try {
+      if (isPagenation) {
+        _page += 1;
+      }
+      toggleLoading();
+      final photosData = await _homeRepository.getPhotosData(page: _page, perPage: _perPage);
+      if (isPagenation) {
+        _photosApiResponse?.data?.addAll(photosData.data ?? []);
+      } else {
+        _photosApiResponse = photosData;
+      }
+    } catch (error, stackTrace) {
+      debugPrint('Error occurred while fetching data: $error');
+      debugPrint('Stack trace: $stackTrace');
+    } finally {
+      toggleLoading();
     }
-    toggleLoading();
-    final photosData = await _homeRepository.getPhotosData(page: _page, perPage: _perPage);
-    if (isPagenation) {
-      _photosApiResponse?.data?.addAll(photosData.data ?? []);
-    } else {
-      _photosApiResponse = photosData;
-    }
-    toggleLoading();
   }
 
   Future<void> searchData({String? search}) async {
     try {
-      toggleLoading();
       _searchResponse = await _homeRepository.searchData(search: search);
     } catch (error) {
       debugPrint("Search failed: $error");
-    } finally {
-      toggleLoading();
     }
     notifyListeners();
   }
