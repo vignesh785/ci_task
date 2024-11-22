@@ -1,3 +1,4 @@
+import 'package:ci_task/Utils/string_constant.dart';
 import 'package:ci_task/features/Home_page/Controller/home_controller.dart';
 import 'package:ci_task/features/Home_page/Model/product_model.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,7 @@ class ProductDialog {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text(product == null ? 'Add Product' : 'Edit Product'),
+          title: Text(product == null ? StringResources.addProduct : StringResources.editProduct),
           content: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
@@ -37,7 +38,7 @@ class ProductDialog {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: const Text('Cancel'),
+              child: const Text(StringResources.cancel),
             ),
             TextButton(
               onPressed: () async {
@@ -55,7 +56,7 @@ class ProductDialog {
                 }
                 Navigator.pop(context);
               },
-              child: Text(product == null ? 'Add' : 'Save'),
+              child: Text(product == null ? StringResources.add : StringResources.save),
             ),
           ],
         );

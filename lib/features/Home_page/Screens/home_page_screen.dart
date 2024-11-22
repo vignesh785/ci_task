@@ -1,5 +1,7 @@
 import 'package:ci_task/Utils/app_color.dart';
+import 'package:ci_task/Utils/string_constant.dart';
 import 'package:ci_task/features/Home_page/Controller/home_controller.dart';
+import 'package:ci_task/features/Home_page/Screens/widget/common_list_tile.dart';
 import 'package:ci_task/features/Home_page/Screens/widget/local_product_builder.dart';
 import 'package:ci_task/features/Home_page/Screens/widget/product_dialog.dart';
 import 'package:ci_task/features/Home_page/Screens/widget/rest_api_builder.dart';
@@ -20,7 +22,11 @@ class _HomePageScreenState extends State<HomePageScreen> {
   @override
   void initState() {
     super.initState();
-    init();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) {
+        init();
+      },
+    );
   }
 
   Future<void> init() async {
@@ -44,29 +50,23 @@ class _HomePageScreenState extends State<HomePageScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text("CI Global Task", style: TextStyle(color: AppColors.whiteColor)), backgroundColor: AppColors.primaryColor, centerTitle: true),
+          title: const Text(StringResources.appbarTitile, style: TextStyle(color: AppColors.whiteColor)),
+          backgroundColor: AppColors.primaryColor,
+          centerTitle: true),
       body: Consumer<HomeController>(
         builder: (context, provider, child) {
           return SingleChildScrollView(
             controller: _scrollController,
             child: Column(
               children: [
-                if (provider.getProduct.isNotEmpty) ...[
-                  const ListTile(
-                    tileColor: AppColors.primaryColor,
-                    title: Text("Your Local Product", textAlign: TextAlign.center, style: TextStyle(color: AppColors.whiteColor, fontStyle: FontStyle.normal)),
-                  ),
-                  const LocalProductBuilder()
-                ],
-                ListTile(
-                  tileColor: AppColors.primaryColor,
-                  title: const Text("REST API Data", style: TextStyle(color: AppColors.whiteColor, fontStyle: FontStyle.normal)),
-                  trailing: IconButton(
-                      onPressed: () async {
-                        await showSearch(context: context, delegate: CustomSearchDelegate());
-                      },
-                      icon: const Icon(Icons.search, color: AppColors.whiteColor)),
-                ),
+                if (provider.getProduct?.isNotEmpty ?? false) ...[const CommonListTile(title: StringResources.productTitile), const LocalProductBuilder()],
+                CommonListTile(
+                    title: StringResources.apiTitile,
+                    titleAlign: TextAlign.left,
+                    iconOnPressed: () async {
+                      await showSearch(context: context, delegate: CustomSearchDelegate());
+                    },
+                    icon: Icons.search),
                 const RestApiBuilder(),
               ],
             ),
@@ -79,7 +79,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
           onPressed: () {
             ProductDialog.showProductDialog(context, product: null);
           },
-          child: const Text("Add Product", style: TextStyle(color: AppColors.whiteColor))),
+          child: const Text(StringResources.addProduct, style: TextStyle(color: AppColors.whiteColor))),
     );
   }
 }

@@ -46,7 +46,7 @@ class HomeController extends ChangeNotifier {
       toggleLoading();
       _searchResponse = await _homeRepository.searchData(search: search);
     } catch (error) {
-      print("Search failed: $error");
+      debugPrint("Search failed: $error");
     } finally {
       toggleLoading();
     }
@@ -59,25 +59,25 @@ class HomeController extends ChangeNotifier {
   }
 
 // hive
-  late Box<Product> _productBox;
-  Box<Product> get productBox => _productBox;
+  Box<Product>? _productBox;
+  Box<Product>? get productBox => _productBox;
 
-  List<Product> get getProduct {
-    return _productBox.values.toList();
+  List<Product>? get getProduct {
+    return _productBox?.values.toList();
   }
 
   Future<void> createProduct(Product newProduct) async {
-    await _productBox.add(newProduct);
+    await _productBox?.add(newProduct);
     notifyListeners();
   }
 
   Future<void> updateProduct(int index, Product updateProduct) async {
-    await _productBox.putAt(index, updateProduct);
+    await _productBox?.putAt(index, updateProduct);
     notifyListeners();
   }
 
   Future<void> deleteProduct(index) async {
-    await _productBox.deleteAt(index);
+    await _productBox?.deleteAt(index);
     notifyListeners();
   }
 }

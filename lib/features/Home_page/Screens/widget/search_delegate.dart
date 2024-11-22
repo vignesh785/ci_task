@@ -1,3 +1,4 @@
+import 'package:ci_task/Utils/string_constant.dart';
 import 'package:ci_task/features/Home_page/Controller/home_controller.dart';
 import 'package:ci_task/features/Home_page/Model/photos_api_response.dart';
 import 'package:ci_task/features/Home_page/Screens/widget/tile_card.dart';
@@ -53,7 +54,7 @@ class CustomSearchDelegate extends SearchDelegate<String> {
     if (suggestionList.isEmpty) {
       return Center(
         child: Text(
-          query.isEmpty ? 'Start typing to search' : 'No suggestions found',
+          query.isEmpty ? StringResources.startTyping : StringResources.noSuggestion,
           style: const TextStyle(color: Colors.grey),
         ),
       );
